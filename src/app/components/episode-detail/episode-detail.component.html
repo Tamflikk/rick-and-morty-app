@@ -1,0 +1,65 @@
+<div *ngIf="episode">
+    <div class="mb-4">
+      <a routerLink="/episodes" class="inline-flex items-center text-green-600 hover:text-green-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to Episodes
+      </a>
+    </div>
+  
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden p-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ episode.name }}</h1>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-gray-500 font-semibold mb-1">Episode Code</h3>
+          <p class="text-lg">{{ episode.episode }}</p>
+        </div>
+        
+        <div>
+          <h3 class="text-gray-500 font-semibold mb-1">Air Date</h3>
+          <p class="text-lg">{{ episode.air_date }}</p>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold mb-4">Characters in this Episode</h3>
+        
+        <div *ngIf="loading" class="flex py-4">
+          <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-green-500"></div>
+          <span class="ml-2">Loading characters...</span>
+        </div>
+        
+        <div *ngIf="!loading && characters.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div *ngFor="let character of characters" class="bg-gray-100 rounded-lg overflow-hidden">
+            <a [routerLink]="['/character', character.id]" class="block">
+              <img [src]="character.image" [alt]="character.name" class="w-full">
+              <div class="p-2">
+                <p class="font-medium truncate">{{ character.name }}</p>
+                <div class="flex items-center">
+                  <span 
+                    class="inline-block w-2 h-2 rounded-full mr-2" 
+                    [ngClass]="{
+                      'bg-green-500': character.status === 'Alive',
+                      'bg-red-500': character.status === 'Dead',
+                      'bg-gray-500': character.status === 'unknown'
+                    }"
+                  ></span>
+                  <span class="text-sm text-gray-600">{{ character.species }}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <p *ngIf="!loading && episode.characters.length > 10" class="mt-4 text-gray-600">
+          Showing 10 of {{ episode.characters.length }} characters.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!episode" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded my-4">
+    <p>Episode not found or failed to load</p>
+  </div>

@@ -1,0 +1,52 @@
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Episodes</h1>
+  
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+    </div>
+  
+    <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded my-4">
+      <p>Error loading episodes. Please try again later.</p>
+    </div>
+  
+    <div *ngIf="!loading && !error && episodes.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div *ngFor="let episode of episodes" class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+        <a [routerLink]="['/episode', episode.id]" class="block h-full">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-bold text-xl mb-2">{{ episode.name }}</h3>
+              <p class="text-sm text-gray-600 mb-1">
+                <span class="font-semibold">Episode:</span> {{ episode.episode }}
+              </p>
+              <p class="text-sm text-gray-600">
+                <span class="font-semibold">Air Date:</span> {{ episode.air_date }}
+              </p>
+            </div>
+            <div class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm">
+              {{ episode.characters.length }} characters
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && !error && totalPages > 0" class="flex justify-center mt-8 space-x-2">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Previous
+      </button>
+      <span class="px-4 py-2 bg-gray-100 rounded">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages"
+        class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+      </button>
+    </div>
+  </div>
